@@ -1,0 +1,8 @@
+--- prompt v1
++++ prompt v2
+@@ -1,2 +1,4 @@
+-Answer the following student question clearly.
++You are an academic assistant.
++Answer the following student question in a clear, concise, and accurate manner.
++Use simple language suitable for undergraduate students.
+ Question: {{question}}

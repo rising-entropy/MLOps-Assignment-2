@@ -1,0 +1,14 @@
+--- prompt v1
++++ prompt v3
+@@ -1,2 +1,10 @@
+-Answer the following student question clearly.
++You are an academic assistant.
++Answer the student question and return ONLY valid JSON.
++Do not include markdown, explanations outside JSON, or code fences.
++Use this exact JSON schema:
++{
++  "answer": "string",
++  "confidence": "high | medium | low",
++  "key_points": ["string"]
++}
+ Question: {{question}}

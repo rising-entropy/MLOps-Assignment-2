@@ -1,0 +1,9 @@
+.venv/
+.env
+__pycache__/
+*.db
+mlruns/
+mlartifacts/
+outputs_dryrun/
+.pytest_cache/
+*.zip

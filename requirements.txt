@@ -1,0 +1,10 @@
+﻿ipykernel==7.3.0
+matplotlib==3.10.9
+mlflow==3.17.1
+nbconvert==7.17.2
+nbformat==5.11.1
+openai==3.42.0
+pandas==2.3.3
+pytest==9.2.0
+python-dotenv==1.2.4
+reportlab==5.1.0

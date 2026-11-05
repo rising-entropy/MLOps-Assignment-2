@@ -7954,7 +7954,7 @@ API key set  : True
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The brief asks for five academic questions. Instead of generic textbook ones, these are drawn from our own MTech modules (ML, deep learning, MLOps, LLMOps) and written the way a working-professional student would ask a support desk. They differ on purpose in kind and expected answer length, because EduAssist's real traffic would, and a spread of lengths exercises the cost and latency behaviour better than five look-alike questions. Every prompt version gets the same questions, so differences come from the prompt and not from the input.</p>
+<p>Below are the 5 academic questions we will use for the experiment. Every prompt version gets the same questions, so differences come from the prompt and not from the input.</p>
 <table>
 <thead>
 <tr>
@@ -7992,6 +7992,7 @@ API key set  : True
 </tbody>
 </table>
 <p><code>{{question}}</code> below is the MLflow template variable.</p>
+<p>With each prompt version, we make the prompt more and more descriptive of how we want the answer.</p>
 </div>
 </div>
 </div>
@@ -8081,7 +8082,7 @@ Question: What does the F1 score measure, and when should it be preferred over a
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="JSON-validity-check">JSON validity check<a class="anchor-link" href="#JSON-validity-check">¶</a></h4><p>The <code>valid_json</code> metric is strict on purpose. The raw response must parse as JSON and match the schema exactly: keys <code>answer</code>, <code>confidence</code>, <code>key_points</code>, with <code>confidence</code> limited to high / medium / low. A response wrapped in a code fence or preceded by a sentence counts as invalid, because the prompt forbids both and a downstream parser would fail on them.</p>
+<h4 id="JSON-validity-check">JSON validity check<a class="anchor-link" href="#JSON-validity-check">¶</a></h4><p>The <code>valid_json</code> metric is strict on purpose. The raw response must parse as JSON and match the schema exactly: keys <code>answer</code>, <code>confidence</code>, <code>key_points</code>, with <code>confidence</code> limited to high / medium / low. Anything else would fail</p>
 </div>
 </div>
 </div>
@@ -8165,7 +8166,7 @@ bad schema  : False
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="API-call-function">API call function<a class="anchor-link" href="#API-call-function">¶</a></h4><p>One function sends a prompt and returns everything Task 1 and Task 2 need: start and end time, latency, status, response text and token usage. Latency is timed with a monotonic clock around the API call only, so local processing is excluded. The key comes from the environment, and any API failure is recorded as <code>status = "error"</code> instead of crashing the run (it is retried with a growing delay first).</p>
+<h4 id="API-call-function">API call function<a class="anchor-link" href="#API-call-function">¶</a></h4><p>One function sends a prompt and returns everything Task 1 and Task 2 need: start and end time, latency, status, response text and token usage. Latency is timed with a monotonic clock around the API call only. Local processing is excluded. The key comes from the environment, and any API failure is recorded as <code>status = "error"</code> instead of crashing the run (it is retried with a growing delay first).</p>
 </div>
 </div>
 </div>
@@ -8215,7 +8216,7 @@ bad schema  : False
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h4 id="Run-the-requests">Run the requests<a class="anchor-link" href="#Run-the-requests">¶</a></h4><p>Each of the three prompt versions is sent each of the five questions 3 times: 5 x 3 x 3 = 45 requests. The repeats are interleaved (repeat, then version, then question) so a slow period on the provider's side hits every version alike instead of penalising whichever one happened to run then.</p>
 <p>Task 1 reports the five <code>v1</code> requests of the first repeat, as the brief asks. The repeats are used afterwards to measure how noisy latency really is, and Tasks 2 and 3 average over all of them, so every number in this notebook comes from one set of API calls. Cost, tokens per second, answer length and key-point count are added to each row.</p>
-<p>The cell below reuses the saved log <code>outputs/latency_tokens_cost.csv</code> so that the notebook, screenshots and report stay consistent. Set the environment variable <code>REFRESH=1</code> to call the API again (a few minutes).</p>
+<p>The cell below makes the requests (a few minutes) and saves the log to <code>outputs/latency_tokens_cost.csv</code>.</p>
 </div>
 </div>
 </div>
@@ -8267,11 +8268,7 @@ bad schema  : False
     <span class="k">return</span> <span class="n">df</span>
 
 
-<span class="k">if</span> <span class="n">CALLS_CSV</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"REFRESH"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"1"</span><span class="p">:</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">CALLS_CSV</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"Loaded saved log:"</span><span class="p">,</span> <span class="n">CALLS_CSV</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">collect_calls</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">collect_calls</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Shape    :"</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Status   :"</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
@@ -8288,8 +8285,7 @@ bad schema  : False
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Loaded saved log: outputs\latency_tokens_cost.csv
-Shape    : (45, 20)
+<pre>Shape    : (45, 20)
 Status   : {'success': 45}
 </pre>
 </div>

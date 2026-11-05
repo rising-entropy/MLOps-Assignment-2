@@ -15,7 +15,6 @@ Everything runs from one notebook, `assignment.ipynb`.
 | `LLM_BASE_URL` | Optional, for OpenAI-compatible providers (Groq, Gemini, Ollama) |
 | `LLM_MODEL`, `LLM_API_VERSION` | Model name and API version, recorded in the notebook |
 | `INPUT_PRICE_PER_M`, `OUTPUT_PRICE_PER_M`, `PRICING_DATE` | Published pricing used for cost (USD per 1M tokens) |
-| `REFRESH` | Set to `1` to make fresh API calls instead of reusing the saved CSV |
 
 Copy `.env.example` to `.env` and fill it in (`.env` is git-ignored).
 
@@ -31,9 +30,7 @@ pip install -r requirements.txt
 jupyter nbconvert --to notebook --execute --inplace assignment.ipynb
 jupyter nbconvert --to html --embed-images assignment.ipynb
 ```
-The notebook makes the API calls, writes `outputs/latency_tokens_cost.csv`, registers the prompts, logs the MLflow runs, promotes the best version with the `production` alias and writes `outputs/prompt_evaluation_results.csv` and the prompt diffs.
-
-If `outputs/latency_tokens_cost.csv` already exists the notebook reuses it instead of calling the API again. Set `REFRESH=1` to make fresh calls (45 requests: 3 repeats x 3 versions x 5 questions).
+The notebook makes the 45 API calls (3 repeats x 3 versions x 5 questions), writes `outputs/latency_tokens_cost.csv`, registers the prompts, logs the MLflow runs, promotes the best version with the `production` alias and writes `outputs/prompt_evaluation_results.csv` and the prompt diffs.
 
 ## MLflow UI
 ```powershell

@@ -8272,7 +8272,13 @@ bad schema  : False
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Shape    :"</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Status   :"</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
-<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"response_text"</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clock</span><span class="p">(</span><span class="n">series</span><span class="p">):</span>
+    <span class="c1"># UTC clock time for display, e.g. 20:37:14.970; the CSV keeps the full timestamps</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">series</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%H:%M:%S.</span><span class="si">%f</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+
+
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"response_text"</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">clock</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"start_time"</span><span class="p">]),</span>
+                                                          <span class="n">end_time</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">clock</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"end_time"</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -8338,8 +8344,8 @@ Status   : {'success': 45}
 <td>Q1</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:14.970+00:00</td>
-<td>2026-11-03T20:37:17.985+00:00</td>
+<td>20:37:14.970</td>
+<td>20:37:17.985</td>
 <td>3.0150</td>
 <td>success</td>
 <td>28</td>
@@ -8359,8 +8365,8 @@ Status   : {'success': 45}
 <td>Q2</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:17.986+00:00</td>
-<td>2026-11-03T20:37:20.175+00:00</td>
+<td>20:37:17.986</td>
+<td>20:37:20.175</td>
 <td>2.1905</td>
 <td>success</td>
 <td>43</td>
@@ -8380,8 +8386,8 @@ Status   : {'success': 45}
 <td>Q3</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:20.177+00:00</td>
-<td>2026-11-03T20:37:24.001+00:00</td>
+<td>20:37:20.177</td>
+<td>20:37:24.001</td>
 <td>3.8247</td>
 <td>success</td>
 <td>50</td>
@@ -8401,8 +8407,8 @@ Status   : {'success': 45}
 <td>Q4</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:24.003+00:00</td>
-<td>2026-11-03T20:37:26.325+00:00</td>
+<td>20:37:24.003</td>
+<td>20:37:26.325</td>
 <td>2.3224</td>
 <td>success</td>
 <td>25</td>
@@ -8422,8 +8428,8 @@ Status   : {'success': 45}
 <td>Q5</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:26.326+00:00</td>
-<td>2026-11-03T20:37:29.682+00:00</td>
+<td>20:37:26.326</td>
+<td>20:37:29.682</td>
 <td>3.3566</td>
 <td>success</td>
 <td>37</td>
@@ -8465,7 +8471,7 @@ Status   : {'success': 45}
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Latency-table:-five-v1-requests">Latency table: five v1 requests<a class="anchor-link" href="#Latency-table:-five-v1-requests">¶</a></h4>
+<h4 id="Latency-table:-five-v1-requests">Latency table: five v1 requests<a class="anchor-link" href="#Latency-table:-five-v1-requests">¶</a></h4><p>Start and end are shown as UTC clock times (the date is the same for all rows); <code>outputs/latency_tokens_cost.csv</code> keeps the full timestamps.</p>
 </div>
 </div>
 </div>
@@ -8480,6 +8486,8 @@ Status   : {'success': 45}
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">v1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">"prompt_version"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"v1"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"repeat"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span>
 <span class="n">latency_table</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[[</span><span class="s2">"question_id"</span><span class="p">,</span> <span class="s2">"prompt_version"</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">,</span> <span class="s2">"start_time"</span><span class="p">,</span> <span class="s2">"end_time"</span><span class="p">,</span>
                     <span class="s2">"latency_seconds"</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">latency_table</span> <span class="o">=</span> <span class="n">latency_table</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">clock</span><span class="p">(</span><span class="n">latency_table</span><span class="p">[</span><span class="s2">"start_time"</span><span class="p">]),</span>
+                                     <span class="n">end_time</span><span class="o">=</span><span class="n">clock</span><span class="p">(</span><span class="n">latency_table</span><span class="p">[</span><span class="s2">"end_time"</span><span class="p">]))</span>
 <span class="n">latency_table</span>
 </pre></div>
 </div>
@@ -8526,8 +8534,8 @@ Status   : {'success': 45}
 <td>Q1</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:14.970+00:00</td>
-<td>2026-11-03T20:37:17.985+00:00</td>
+<td>20:37:14.970</td>
+<td>20:37:17.985</td>
 <td>3.0150</td>
 <td>success</td>
 </tr>
@@ -8536,8 +8544,8 @@ Status   : {'success': 45}
 <td>Q2</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:17.986+00:00</td>
-<td>2026-11-03T20:37:20.175+00:00</td>
+<td>20:37:17.986</td>
+<td>20:37:20.175</td>
 <td>2.1905</td>
 <td>success</td>
 </tr>
@@ -8546,8 +8554,8 @@ Status   : {'success': 45}
 <td>Q3</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:20.177+00:00</td>
-<td>2026-11-03T20:37:24.001+00:00</td>
+<td>20:37:20.177</td>
+<td>20:37:24.001</td>
 <td>3.8247</td>
 <td>success</td>
 </tr>
@@ -8556,8 +8564,8 @@ Status   : {'success': 45}
 <td>Q4</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:24.003+00:00</td>
-<td>2026-11-03T20:37:26.325+00:00</td>
+<td>20:37:24.003</td>
+<td>20:37:26.325</td>
 <td>2.3224</td>
 <td>success</td>
 </tr>
@@ -8566,8 +8574,8 @@ Status   : {'success': 45}
 <td>Q5</td>
 <td>v1</td>
 <td>gemini-3.5-flash-lite</td>
-<td>2026-11-03T20:37:26.326+00:00</td>
-<td>2026-11-03T20:37:29.682+00:00</td>
+<td>20:37:26.326</td>
+<td>20:37:29.682</td>
 <td>3.3566</td>
 <td>success</td>
 </tr>

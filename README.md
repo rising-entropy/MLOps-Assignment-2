@@ -28,9 +28,8 @@ pip install -r requirements.txt
 ## Reproduce
 ```powershell
 python -m pytest tests            # unit tests (no API needed)
-python run_pipeline.py collect    # 15 API calls -> outputs/latency_tokens_cost.csv
+python run_pipeline.py collect    # 45 API calls -> outputs/latency_tokens_cost.csv
 python run_pipeline.py mlflow     # register prompts, log runs, set `production` alias -> outputs/prompt_evaluation_results.csv
-python build_notebook.py          # create assignment.ipynb
 jupyter nbconvert --to notebook --execute --inplace assignment.ipynb
 jupyter nbconvert --to html --embed-images assignment.ipynb
 ```
@@ -53,7 +52,7 @@ Then run `python run_pipeline.py report` to build `outputs/final_report.pdf`.
 - **Questions:** five questions from the MTech modules (definition, debugging, MLOps scenario, architecture, LLMOps economics), chosen so answer lengths differ like real support traffic. Edit `QUESTIONS` in `src/prompts.py` to change them.
 - **Repeats:** every version x question is sent `REPEATS` times (default 3, set with the `REPEATS` env var), interleaved, giving 45 requests. This measures latency noise and adds p95 and standard deviation.
 - **Extra measures:** tokens per second, cost per 1,000 answers, answer length, key-point count, and a business and scale view (volumes, latency-target hit rate, concurrency at peak, price sensitivity). Scale inputs are labelled assumptions in `src/config.py`.
-- **Latency depends on provider load.** Re-measure at a quieter or busier time with: `REFRESH=1` in the notebook environment (or `python run_pipeline.py collect`), then `python run_pipeline.py mlflow`, `python build_notebook.py`, re-execute the notebook, retake the two MLflow screenshots that show metrics, and `python run_pipeline.py report`. Tokens, cost and JSON validity are stable across runs; latency is not.
+- **Latency depends on provider load.** Re-measure at a quieter or busier time with: `REFRESH=1` in the notebook environment (or `python run_pipeline.py collect`), then `python run_pipeline.py mlflow`, re-execute the notebook (its text quotes the numbers from the earlier run, so update it by hand), retake the two MLflow screenshots that show metrics, and `python run_pipeline.py report`. Tokens, cost and JSON validity are stable across runs; latency is not.
 
 ## Offline pipeline test
 `DRY_RUN=1` uses a fake client and writes to `outputs_dryrun/` and `mlflow_dryrun.db`. It only checks the plumbing; **never submit dry-run results**.

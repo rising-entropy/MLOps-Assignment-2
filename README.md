@@ -1,4 +1,4 @@
-﻿# LLMOps Assignment 2: API Cost, Latency, and Prompt Version Management
+# LLMOps Assignment 2: API Cost, Latency, and Prompt Version Management
 
 EduAssist AI scenario: measure latency, compute token cost, and version, evaluate and promote three prompts in MLflow.
 Everything runs from one notebook, `assignment.ipynb`.
@@ -36,12 +36,12 @@ The notebook makes the 45 API calls (3 repeats x 3 versions x 5 questions), writ
 ```powershell
 mlflow ui --backend-store-uri sqlite:///mlflow.db
 ```
-Open http://127.0.0.1:5000. The screenshots in `screenshots/` come from it:
-1. `mlflow_experiment.jpg` - experiment `eduassist_llmops_assignment` with 3 runs and metrics
-2. `prompt_registry.jpg` - Prompts tab, `eduassist-qa-prompt` with v1, v2, v3
-3. `prompt_diff.jpg` - compare v2 vs v3 in the prompt versions view
-4. `production_alias.jpg` - version carrying the `production` alias
-5. `metrics.jpg` - run metrics
+Open http://127.0.0.1:5000. The screenshots in `mlflow_screens/` come from it:
+1. `listing_page.png` and `eval_list_page.png` - experiment `eduassist_llmops_assignment` with its 3 runs and metrics
+2. `v3_prompt_overview.png` - run metrics for `prompt_v3`
+3. `qa-prompt.png` - Prompts tab, `eduassist-qa-prompt` with v1, v2, v3
+4. `compare_prompts.png` - prompt diff, v3 against v2
+5. `production_alias.png` - version 3 carrying the `production` alias
 
 ## Notes
 - Latency depends on provider load, so figures change between runs. Tokens, cost and JSON validity are stable.
